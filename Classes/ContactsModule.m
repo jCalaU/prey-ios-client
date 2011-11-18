@@ -9,90 +9,84 @@
 //
 
 #import "ContactsModule.h"
-#import "AddressBook/AddressBook.h"
+#import <AddressBook/AddressBook.h>
 
 
 @implementation ContactsModule
-
+@synthesize data;
 - (void)main {
 	// AddressBook
+    self.data = [[NSMutableArray alloc] init];
 	ABAddressBookRef ab;
 	ab = ABAddressBookCreate();
-	int len = (int) ABAddressBookGetPersonCount(ab);
-	int i;
-	for(i = 1; i < (len + 1); i++)
+    NSArray *people = (NSArray *)ABAddressBookCopyArrayOfAllPeople(ab);
+    int len = (int) ABAddressBookGetPersonCount(ab);
+	for(int i = 0; i < len; i++)
 	{
-		ABRecordRef person = ABAddressBookGetPersonWithRecordID(ab,(ABRecordID) i);
-		CFStringRef firstName, lastName;
-		char *lastNameString, *firstNameString;
-		firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-		lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+		ABRecordRef person = [people objectAtIndex:i];
+		NSString *field;
+        NSMutableDictionary *dicty = [[[NSMutableDictionary alloc] init] autorelease];
+        field = (NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"firstName"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonMiddleNameProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"middleName"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        if (field != nil) {
+            [dicty setValue:field forKey:@"lastName"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonPrefixProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"prefix"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonSuffixProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"suffix"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonNicknameProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"nickname"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonOrganizationProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"organization"];
+        }
+        
+        field = (NSString *)ABRecordCopyValue(person, kABPersonJobTitleProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"jobTitle"];
+        }
+        field = (NSString *)ABRecordCopyValue(person, kABPersonDepartmentProperty);
+		if (field != nil) {
+            [dicty setValue:field forKey:@"department"];
+        }
+        
+        ABMultiValueRef TS = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        NSArray *multifield = (NSArray *)ABMultiValueCopyArrayOfAllValues(TS);
+        CFRelease(TS);
+        [dicty setValue:multifield forKey:@"telNumbers"];
+        [multifield release];
+        
+        TS = ABRecordCopyValue(person, kABPersonEmailProperty);
+        multifield = (NSArray *)ABMultiValueCopyArrayOfAllValues(TS);
+        CFRelease(TS);
+        [dicty setValue:multifield forKey:@"emails"];
+        [multifield release];
+
+        NSLog(@"%@", dicty);
 		
-		static char* fallback = "";
-		int fbLength = strlen(fallback);
-		
-		int firstNameLength = fbLength;
-		bool firstNameFallback = true;
-		int lastNameLength = fbLength;
-		bool lastNameFallback = true;
-		
-		if (firstName != NULL)
-		{
-			firstNameLength = (int) CFStringGetLength(firstName);
-			firstNameFallback = false;
-		}
-		if (lastName != NULL)
-		{
-			lastNameLength = (int) CFStringGetLength(lastName);
-			lastNameFallback = false;
-		}
-		
-		if (firstNameLength == 0) 
-		{
-			firstNameLength = fbLength;
-			firstNameFallback = true;
-		}
-		if (lastNameLength == 0)
-		{
-			lastNameLength = fbLength;
-			lastNameFallback = true;
-		}
-		
-		firstNameString = malloc(sizeof(char)*(firstNameLength+1));
-		lastNameString = malloc(sizeof(char)*(lastNameLength+1));
-		
-		if (firstNameFallback == true) 
-		{
-			strcpy(firstNameString, fallback);
-		}
-		else
-		{
-			CFStringGetCString(firstName, firstNameString, 10*CFStringGetLength(firstName), kCFStringEncodingASCII);
-		}
-		
-		if (lastNameFallback == true) 
-		{
-			strcpy(lastNameString, fallback);
-		} 
-		else
-		{
-			CFStringGetCString(lastName, lastNameString, 10*CFStringGetLength(lastName), kCFStringEncodingASCII);
-		}
-		
-		// Muestro por la consola los datos
-		printf("%d.\t%s %s\n", i, firstNameString, lastNameString);
-		
-		
-		if (firstName != NULL)
-		{
-			CFRelease(firstName);
-		}
-		if (lastName != NULL) 
-		{
-			CFRelease(lastName);
-		}
-		free(firstNameString);
-		free(lastNameString);
+		[self.data addObject:dicty];
+		[dicty release];
 	}
 	
 }

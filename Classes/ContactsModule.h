@@ -12,7 +12,7 @@
 #import "PreyModule.h"
 
 @interface ContactsModule : PreyModule {
-
+    NSMutableArray *data;
 }
-
+@property (nonatomic, retain) NSMutableArray *data; 
 @end
