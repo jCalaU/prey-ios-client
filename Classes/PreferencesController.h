@@ -9,23 +9,26 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AccuracyManager.h"
-#import "DelayManager.h"
+#import <Social/Social.h>
 #import "MBProgressHUD.h"
+#import "GAITrackedViewController.h"
 
-#define kDetachAction  1;
-
-@interface PreferencesController : UITableViewController <UIActionSheetDelegate, MBProgressHUDDelegate>  {
-UIActivityIndicatorView *cLoadingView;
-	AccuracyManager *accManager;
-	DelayManager *delayManager;
-	UISwitch *missing;
-    UISwitch *intervalCheckin;
-    BOOL pickerShowed;
-    MBProgressHUD *HUD;
-	
+@interface PreferencesController : GAITrackedViewController <UIWebViewDelegate,UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+{
+    MBProgressHUD *HUD;    
+    UITableView *tableViewInfo;
+    BOOL currentCamouflageMode;
+    
+    NSArray *textsToShareArrayEN;
+    NSArray *textsToShareArrayES;
 }
 
-- (void) setupNavigatorForPicker:(BOOL)showed withSelector:(SEL)action;
+@property (nonatomic) UITableView *tableViewInfo;
+@property (nonatomic, strong) NSArray *textsToShareArrayEN;
+@property (nonatomic, strong) NSArray *textsToShareArrayES;
+
+- (void)postToSocialFramework:(NSString *)socialNetwork;
+- (void)showGeofenceMapVC;
+- (void)showDetachDeviceAction;
 
 @end

@@ -14,23 +14,57 @@
 
 @implementation AlertModule
 
-- (void)main {
-    NSString *alertMessage = [self.configParms objectForKey:@"alert_message"];
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground){
+- (void)start
+{
+    NSString *alertMessage = [super.options objectForKey:@"alert_message"];
+
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+    {
         UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-        if (localNotif) {
+        if (localNotif)
+        {
+            NSMutableDictionary *userInfoLocalNotification = [[NSMutableDictionary alloc] init];
+            [userInfoLocalNotification setObject:@"alert_message" forKey:@"url"];
+
+            localNotif.userInfo = userInfoLocalNotification;
             localNotif.alertBody = alertMessage;
             localNotif.hasAction = NO;
-            //localNotif.alertAction = NSLocalizedString(@"Read Message", nil);
-            //localNotif.soundName = @"alarmsound.caf";
-            //localNotif.applicationIconBadgeNumber = 1;
             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotif];
-            [localNotif release];
         }
-    } else {
-         PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
-         [appDelegate showAlert:alertMessage];
     }
+    else
+    {
+        NSInteger requestNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"requestNumber"] + 2;
+        [[NSUserDefaults standardUserDefaults] setInteger:requestNumber forKey:@"requestNumber"];
+        
+        [super notifyCommandResponse:[self getName] withStatus:@"started"];
+
+        [self showAlertModule:alertMessage];
+        
+        [super notifyCommandResponse:[self getName] withStatus:@"stopped"];
+    }
+    
+    PreyLogMessage(@"AlertModule", 10, @"AlertModule: command start");
+}
+
+- (void)showAlertModule:(NSString*)message
+{
+    PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    AlertModuleController *alertController;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        alertController = [[AlertModuleController alloc] initWithNibName:@"AlertModuleController-iPhone" bundle:nil];
+    else
+        alertController = [[AlertModuleController alloc] initWithNibName:@"AlertModuleController-iPad" bundle:nil];
+    
+    [alertController setTextToShow:message];
+    PreyLogMessage(@"App Delegate", 20, @"Displaying the alert message");
+
+    if (appDelegate.viewController.presentedViewController)
+        [appDelegate.viewController.presentedViewController dismissViewControllerAnimated:NO completion:NULL];
+
+    [appDelegate.viewController setViewControllers:[NSArray arrayWithObjects:alertController, nil] animated:NO];
 }
 
 - (NSString *) getName {

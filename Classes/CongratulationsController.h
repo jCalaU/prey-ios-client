@@ -9,20 +9,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-
-@interface CongratulationsController : UIViewController {
+@interface CongratulationsController : GAITrackedViewController <UIAlertViewDelegate> {
 
 	UILabel *congratsTitle;
-	UITextView *congratsMsg;
+	UILabel *congratsMsg;
 	UIButton *ok;
     NSString *txtToShow;
+    CLLocationManager *authLocation;
 }
 
-@property (nonatomic, retain) IBOutlet UILabel *congratsTitle;
-@property (nonatomic, retain) IBOutlet UITextView *congratsMsg;
-@property (nonatomic, retain) IBOutlet UIButton *ok;
-@property (nonatomic, retain) NSString *txtToShow;
+@property (nonatomic) IBOutlet UILabel *congratsTitle;
+@property (nonatomic) IBOutlet UILabel *congratsMsg;
+@property (nonatomic) IBOutlet UIButton *ok;
+@property (nonatomic) NSString *txtToShow;
+@property (nonatomic) CLLocationManager *authLocation;
 
 - (IBAction) okPressed: (id) sender;
 

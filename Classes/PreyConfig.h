@@ -13,40 +13,55 @@
 #import "Device.h"
 
 
-@interface PreyConfig : NSObject {
-
-	NSString *apiKey;
+@interface PreyConfig : NSObject <UIActionSheetDelegate> {
+    NSString *apiKey;
+    NSString *tokenPanel;
 	NSString *deviceKey;
 	NSString *checkUrl;
 	NSString *email;
 	double desiredAccuracy;
 	int	delay;
 	BOOL alreadyRegistered;
-	BOOL missing;
+	BOOL isMissing;
     BOOL askForPassword;
 	BOOL alertOnReport;
     BOOL camouflageMode;
     BOOL intervalMode;
-	
+    BOOL isTouchIDEnabled;
+    BOOL hideTourWeb;
 }
-@property (nonatomic,retain) NSString *apiKey;
-@property (nonatomic,retain) NSString *deviceKey;
-@property (nonatomic,retain) NSString *checkUrl;
-@property (nonatomic,retain) NSString *email;
+
+@property (nonatomic) NSString *checkUrl;
+@property (nonatomic) NSString *controlPanelHost;
+@property (nonatomic) NSString *checkPath;
+@property (nonatomic) NSString *exceptionsEndpoint;
+@property (nonatomic) NSString *dataEndpoint;
+@property (nonatomic) NSString *apiKey;
+@property (nonatomic) NSString *tokenPanel;
+@property (nonatomic) NSString *deviceKey;
+@property (nonatomic) NSString *email;
+
+@property BOOL sendCrashReports;
 @property BOOL alreadyRegistered;
+@property BOOL isMissing;
 @property (nonatomic) double desiredAccuracy;
-@property (nonatomic) int delay;
-@property BOOL missing;
-@property (getter = isPro) BOOL pro;
 @property (nonatomic) BOOL askForPassword;
-@property (nonatomic) BOOL alertOnReport;
 @property (nonatomic) BOOL camouflageMode;
 @property (nonatomic) BOOL intervalMode;
+@property (nonatomic) BOOL alertOnReport;
+@property (nonatomic) BOOL isTouchIDEnabled;
+@property (nonatomic) BOOL hideTourWeb;
+@property (nonatomic) int delay;
+@property (getter = isPro) BOOL pro;
 
 + (PreyConfig*) instance;
 + (PreyConfig*) initWithUser:(User*)user andDevice:(Device*)device;
-- (void) updateMissingStatus; //get status from Control Panel
++ (PreyConfig*) initWithApiKey:(NSString*)apiKeyUser andDevice:(Device*)device;
+- (NSString *) deviceCheckPathWithExtension: (NSString *) extension;
+- (NSString *) readConfigValueForKey: (NSString *) key;
 - (void) loadDefaultValues;
 - (void) saveValues;
-- (void) detachDevice;
+- (void)resetValues;
+- (void)checkLastVersionOnStore;
+- (bool)shouldAskForUpdateApp;
 @end

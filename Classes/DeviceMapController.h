@@ -8,9 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/Mapkit.h>
-@interface DeviceMapController : UIViewController {
+#import "GAITrackedViewController.h"
+#import "MBProgressHUD.h"
+
+@interface DeviceMapController : GAITrackedViewController <MKMapViewDelegate> {
     MKMapView *mapa;
+    CLLocationManager * MANG;
+    MBProgressHUD *HUD;
+    BOOL canUpdateUserLoc;
 }
 
-@property (nonatomic, retain) MKMapView *mapa;
+@property (nonatomic) MKMapView *mapa;
+@property (nonatomic) CLLocationManager * MANG;
+@property (nonatomic) BOOL canUpdateUserLoc;
+
+- (void)goToUserLocation;
+
 @end

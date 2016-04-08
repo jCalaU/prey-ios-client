@@ -9,11 +9,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DataModule.h"
 
-@interface LocationController : NSObject <CLLocationManagerDelegate> {
+@interface LocationController : DataModule <CLLocationManagerDelegate> {
 
 }
-@property (nonatomic, retain) CLLocationManager *accurateLocationManager;
+@property (nonatomic) CLLocationManager *accurateLocationManager;
 
 +(LocationController *) instance;
 - (void)startUpdatingLocation;

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "User.h"
 
 @interface Device : NSObject {
 	
@@ -20,21 +21,27 @@
 	NSString *macAddress;
     NSString *uuid;
     
+    NSString *cpu_model;
+    NSString *cpu_speed;
+    NSString *cpu_cores;
+
+    NSString *ram_size;
 }
 
-@property (nonatomic,retain) NSString *deviceKey;
-@property (nonatomic,retain) NSString *name;
-@property (nonatomic,retain) NSString *type;
-@property (nonatomic,retain) NSString *vendor;
-@property (nonatomic,retain) NSString *model;
-@property (nonatomic,retain) NSString *os;
-@property (nonatomic,retain) NSString *version;
-@property (nonatomic,retain) NSString *macAddress;
-@property (nonatomic,retain) NSString *uuid;
+@property (nonatomic) NSString *deviceKey;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSString *vendor;
+@property (nonatomic) NSString *model;
+@property (nonatomic) NSString *os;
+@property (nonatomic) NSString *version;
+@property (nonatomic) NSString *macAddress;
+@property (nonatomic) NSString *uuid;
+@property (nonatomic) NSString *cpu_model;
+@property (nonatomic) NSString *cpu_speed;
+@property (nonatomic) NSString *cpu_cores;
+@property (nonatomic) NSString *ram_size;
 
-
-+(Device*) newDeviceForApiKey: (NSString*) apiKey;
-+(Device*) allocInstance;
--(void) detachDevice;
++ (void)newDeviceForApiKey:(User*)userKey withBlock:(void (^)(User *user, Device *dev, NSError *error))block;
 
 @end

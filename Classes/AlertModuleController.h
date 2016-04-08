@@ -9,17 +9,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
+@interface AlertModuleController : GAITrackedViewController {
 
-@interface AlertModuleController : UIViewController {
-
-	UILabel *preyName;
+    UILabel *preyName;
 	UILabel *text;
 	NSString *textToShow;
 }
 
-@property (nonatomic, retain) IBOutlet UILabel *preyName;
-@property (nonatomic, retain) IBOutlet UILabel *text;
-@property (nonatomic, retain) NSString *textToShow;
+@property (nonatomic) IBOutlet UILabel *preyName;
+@property (nonatomic) IBOutlet UILabel *text;
+@property (nonatomic) NSString *textToShow;
 
 @end

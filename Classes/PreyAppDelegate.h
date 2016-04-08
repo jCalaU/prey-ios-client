@@ -11,24 +11,26 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-
 @interface PreyAppDelegate : NSObject <UIApplicationDelegate, UINavigationControllerDelegate, UIWebViewDelegate> {
     UIWindow *window;
 	UINavigationController *viewController;
-	NSDate *wentToBackground;
+    UIWebView *fakeView;
 	BOOL showFakeScreen;
-    NSString *url;
+    BOOL screenLoaded;
+    BOOL showAlert;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UINavigationController *viewController;
+@property (nonatomic) NSString *url;
+@property (nonatomic) NSString *alertMessage;
+@property (nonatomic) IBOutlet UIWindow *window;
+@property (nonatomic) IBOutlet UINavigationController *viewController;
+@property (nonatomic, copy) void (^onPreyVerificationSucceeded)(UIBackgroundFetchResult);
 
-- (void)showOldUserWizard;
-- (void)showNewUserWizard;
-- (void)showPreferences;
 - (void)showAlert: (NSString *) textToShow;
 - (void)showFakeScreen;
 - (void)registerForRemoteNotifications;
+- (void)changeShowFakeScreen:(BOOL)value;
+- (void)checkedCompletionHandler;
 
 @end
 

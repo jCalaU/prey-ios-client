@@ -1,12 +1,17 @@
-[submodule "Classes/asi-http-request"]
-	path = Classes/asi-http-request
-	url = git://github.com/pokeb/asi-http-request.git
 [submodule "Classes/MBProgressHUD"]
 	path = Classes/MBProgressHUD
 	url = git://github.com/jdg/MBProgressHUD.git
+[submodule "Classes/NSLogger"]
+	path = Classes/NSLogger
+	url = git://github.com/fpillet/NSLogger.git
+[submodule "Classes/AFNetworking-1.x"]
+	path = Classes/AFNetworking-1.x
+url=https://github.com/jCalaU/AFNetworking
+	branch = 1.x
 [submodule "Classes/UIDevice-Extension"]
 	path = Classes/UIDevice-Extension
-	url = git://github.com/erica/uidevice-extension.git
-[submodule "Classes/InAppSubscriptions"]
-	path = Classes/InAppSubscriptions
-	url = git@bitbucket.org:dtorres/prey-inappstuff.git
+	url = https://github.com/jCalaU/uidevice-extension
+[submodule "Classes/AFNetworking"]
+	path = Classes/AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking
+	branch = master

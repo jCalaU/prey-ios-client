@@ -1,0 +1,151 @@
+"About" = "Quant a...";
+
+"Access Denied" = "Accés denegat";
+
+"Accessing your account..." = "S'està accedint al compte...";
+
+"Account created! Remember to verify your account by opening your inbox and clicking on the link we sent to your email address." = "S'ha creat el compte! Recordeu verificar el vostre compte, obrint l'enllaç que us hem enviat per correu electrònic.";
+
+"Add this device!" = "Afegeix aquest dispositiu!";
+
+"Already a Prey user" = "Ja sóc usuari de Prey";
+
+"An unknown error has occurred" = "Hi ha hagut un error desconegut";
+
+"Attaching device..." = "S'està associant el dispositiu...";
+
+"Camouflage mode" = "Mode camuflatge";
+
+"Checking your password..." = "S'està verificant la contrasenya...";
+
+"Choose a 6 characters password" = "Contrasenya (6 caràcters com a mínim)";
+
+"Congratulations!" = "Enhorabona!";
+
+"Congratulations! You have successfully associated this iOS device with your Prey account." = "Heu associat correctament aquest dispositiu iOS amb el vostre compte.";
+
+"Couldn't add your device" = "No es pot afegir el dispositiu.";
+
+"Couldn't check your password" = "No es pot verificar la contrasenya";
+
+"Create my account!" = "Crea un compte nou!";
+
+"Create Prey account" = "Crea un compte de Prey";
+
+"Creating account..." = "S'està creant el compte...";
+
+"Current Location" = "Ubicació actual";
+
+"Detach device" = "Suprimeix el dispositiu";
+
+"Device not ready!" = "Dispositiu no preparat!";
+
+"Device ready" = "Dispositiu preparat.";
+
+"Enter a valid e-mail address" = "Inseriu un correu electrònic vàlid.";
+
+"Help" = "Ajuda";
+
+"It seems you've reached your limit for devices on the Control Panel. Try removing this device from your account if you had already added." = "Sembla que heu exhaurit el nombre màxim de dispositius permesos al vostre compte. Proveu suprimint els que ja no feu servir.";
+
+"Location services are disabled for Prey. Reports will not be sent." = "Els serveis de localització no estan disponibles per a Prey. No s'enviaran informes.";
+
+"Log in to Prey" = "Inicia la sessió a Prey";
+
+"New user" = "Usuari nou";
+
+"No, don't delete" = "No, no suprimeixis";
+
+"OK" = "Correcte";
+
+"Password must be at least 6 characters" = "La contrasenya ha de tenir com a mínim 6 caràcters";
+
+"Passwords do not match" = "Les contrasenyes no coincideixen";
+
+"Please wait" = "S'està treballant";
+
+"Preferences" = "opcions";
+
+"Privacy Policy" = "Política de privadesa";
+
+"Repeat your password" = "Torneu a inserir la contrasenya";
+
+"Settings" = "opcions";
+
+"Terms of Service" = "Condicions d'ús";
+
+"There was a problem getting your account information. Please make sure the email address you entered is valid, as well as your password." = "No s'ha pogut accedir al compte. Assegureu-vos que les credencials inserides són correctes.";
+
+"Unable to access Location Services.\n You need to grant Prey access if you wish to track your device." = "Ha fallat l'accés als serveis d'ubicació.\nHeu de concedir permisos de seguretat a Prey perquè pugui localitzar el vostre dispositiu.";
+
+"Unable to fetch location data. Is this device on airplane mode?" = "No s'ha pogut obtenir les dades de la ubicació. El dispositiu està en «Mode avió»?";
+
+"Upgrade to Pro" = "Actualitzeu-vos a «Pro»";
+
+"User couldn't be created" = "No s'ha pogut crear l'usuari";
+
+"Version" = "Versió";
+
+"Warning" = "Atenció";
+
+"We have a situation!" = "Tenim un problema!";
+
+"Wrong password. Try again." = "Contrasenya no vàlida. Torneu a provar.";
+
+"Yes, remove from my account" = "Sí, suprimeix-lo del compte";
+
+"You have successfully associated this device with your Prey Control Panel account." = "Heu associat correctament aquest dispositiu amb el vostre compte. Aneu a les opcions per acabar de configurar Prey.";
+
+"You're about to delete this device from the Control Panel.\n Are you sure?" = "El dispositiu serà suprimit del panell de control i també la informació associada.\n Voleu continuar?";
+
+"Your device is protected and waiting for the activation signal." = "El dispositiu està preparat i a l'espera de rebre el senyal d'activació.";
+
+"Your email" = "Correu electrònic";
+
+"Your name" = "Nom";
+
+"Rate us" = "Puntue-nos";
+
+"Give us ★★★★★ on the App Store if you like Prey." = "Puntueu amb ★★★★★ a l'App Store si us agrada Prey.";
+
+"Remind me later" = "Recorda-m'ho més tard";
+
+"Yes, rate Prey!" = "Sí, vull puntuar a Prey!";
+
+"Information" = "Informació";
+
+"Thanks for your support. You've just gained access to all the Pro features, including private and direct support from us, the Prey Team." = "Gràcies pel vostre suport. Ara teniu al vostre abast totes les funcionalitats d'un compte Premium, incloent suport directe i privat amb nosaltres, l'equip de Prey.";
+
+"Congrats,\nyou're now Pro" = "Enhorabona,\nJa sou Pro";
+
+"Your password" = "Contrasenya";
+
+"Forgot your password?" = "Heu oblidat la contrasenya?";
+
+"Try Again" = "Torneu a provar";
+
+"Device set up!" = "S'ha creat el dispositiu!";
+
+"Manage Prey settings" = "Administració de la configuració de Prey";
+
+"Go to Control Panel" = "Vés al panel de control";
+
+"Type in your password" = "Inseriu la contrasenya";
+
+"Swipe to go back" = "Llisque per tornar enrere";
+
+"Share on Facebook" = "Comparteix al Facebook";
+
+"Share on Twitter" = "Comparteix al Twitter";
+
+"Detaching device ..." = "S'està desvinculant...";
+
+"Is not available" = "No està disponible";
+
+"Canceled transaction, please try again." = "Transacció cancel·lada. Torneu a provar.";
+
+"Alert notification disabled" = "Notificació d'alerta inhabilitada";
+
+"You need to grant Prey access to show alert notifications in order to remotely mark it as missing." = "Heu de permetre a Prey l'accés a les notificacions d'alerta perquè pugui marcar el dispositiu com a perdut de forma remota.";
+
+"Keep Prey in background to enable all of its features." = "Mantingueu Prey en rerefons per habilitar totes les característiques.";

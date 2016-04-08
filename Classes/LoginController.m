@@ -11,21 +11,24 @@
 #import "LoginController.h"
 #import "User.h"
 #import "PreyConfig.h"
+#import "Constants.h"
 #import <CoreLocation/CoreLocation.h>
-@interface LoginController()
-
-- (void) checkPassword;
-- (void) hideKeyboard;
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up;
-
-@property int movementDistance; // tweak as needed
-
-@end
-
+#import "PreyAppDelegate.h"
+#import "PreferencesController.h"
+#import "ReviewRequest.h"
+#import "Constants.h"
+#import "UIDevice-Reachability.h"
+#import <LocalAuthentication/LocalAuthentication.h>
+#import "PreyTourWebView.h"
+#import "DeviceAuth.h"
+#import "PreyRestHttpV2.h"
+#import "PreyGeofencingController.h"
+#import "PreferencesController-iPad.h"
 
 @implementation LoginController
 
-@synthesize loginPassword, loginImage, movementDistance, nonCamuflageImage, buttn, detail, devReady, loginButton, preyLogo, scrollView, tableView, tipl;
+@synthesize loginImage, scrollView, loginPassword, nonCamuflageImage, preyLogo, devReady, detail, tipl;
+@synthesize loginButton, panelButton, settingButton, hideLogin;
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -37,71 +40,81 @@
 	}
 }
 
-- (void) checkPassword {
-	PreyConfig *config = [PreyConfig instance];
-    
-    @try {
-        User *user = [User allocWithEmail: config.email password: loginPassword.text];
-        [config setPro:user.isPro];
-		PreferencesController *preferencesViewController = [[PreferencesController alloc] initWithNibName:@"PreferencesController" bundle:nil];
-		preferencesViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-        [self.navigationController pushViewController:preferencesViewController animated:YES];
-        [preferencesViewController release];
-		/*
-        [self presentModalViewController:preferencesViewController animated:YES];
-		
-         */
-		[user release];
-	} @catch (NSException *e)  {
-        NSString *title = nil;
-        NSString *message = nil;
-        if ([[e name]isEqualToString:@"GetApiKeyUnknownException"]){
-            message = [e description];
-            title = NSLocalizedString(@"Couldn't check your password",nil);
+- (void) checkPassword
+{
+    PreyConfig *config = [PreyConfig instance];
+    [User getTokenFromPanel:config.email password:loginPassword.text
+                  withBlock:^(NSString *token, NSError *error)
+    {
+        PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+        [MBProgressHUD hideHUDForView:appDelegate.viewController.view animated:NO];
+        
+        if (!error) // User Login
+        {
+            [config setTokenPanel:token];
+            [config saveValues];
+            [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*0, 0) animated:YES];
         }
-        else {
-            message = NSLocalizedString(@"Wrong password. Try again.",nil);
-            title = NSLocalizedString(@"Access Denied",nil);
-        }
-		UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alertView show];
-		[alertView release];
-	} 
-	
+    }]; // End Block User
+  
+
+    // Disable for JWT Login 2016.03.31
+    /*
+    [User allocWithEmail:config.email password:loginPassword.text
+               withBlock:^(User *user, NSError *error)
+     {
+         PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+         [MBProgressHUD hideHUDForView:appDelegate.viewController.view animated:NO];
+         
+         if (!error) // User Login
+         {
+             [config setPro:user.isPro];
+             [config saveValues];
+             [self showPreferencesController];
+         }
+     }]; // End Block User
+    */
 }
 
-- (IBAction) checkLoginPassword: (id) sender {
-	if ([loginPassword.text length] <6){
-		UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Access Denied",nil) message:NSLocalizedString(@"Wrong password. Try again.",nil) delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];		
+- (void)showPreferencesController
+{
+    PreyAppDelegate *appDelegate                    = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+    PreferencesController *preferencesController    = [[PreferencesController alloc] init];
+    preferencesController.modalTransitionStyle      = UIModalTransitionStyleFlipHorizontal;
+    if (IS_IPAD)
+    {
+        PreferencesController_iPad *viewController  = [[PreferencesController_iPad alloc] initWithNibName:@"PreferencesController-iPad" bundle:nil];
+        viewController.leftViewController = preferencesController;
+        [appDelegate.viewController pushViewController:viewController animated:YES];
+    }
+    else
+        [appDelegate.viewController pushViewController:preferencesController animated:YES];
+
+    [appDelegate.viewController setNavigationBarHidden:NO animated:NO];
+}
+
+- (IBAction) checkLoginPassword: (id) sender
+{
+	if ([loginPassword.text length] <6)
+    {
+		UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Access Denied",nil) message:NSLocalizedString(@"Wrong password. Try again.",nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alertView show];
-		[alertView release];
 		return;
 	}
+    
 	[self hideKeyboard];
-	HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    HUD.delegate = self;
-    HUD.labelText = NSLocalizedString(@"Please wait",nil);
-	HUD.detailsLabelText = NSLocalizedString(@"Checking your password...",nil);
-	[self.view addSubview:HUD];
-	[HUD showWhileExecuting:@selector(checkPassword) onTarget:self withObject:nil animated:YES];
+    
+    PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+    HUD = [MBProgressHUD showHUDAddedTo:appDelegate.viewController.view animated:YES];
+    HUD.label.text = NSLocalizedString(@"Please wait",nil);
+    HUD.detailsLabel.text = NSLocalizedString(@"Checking your password...",nil);
+    [self checkPassword];
 }
 
 - (void) hideKeyboard {
 	[loginPassword resignFirstResponder];
-	
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
-
-- (void)hudWasHidden {
-    // Remove HUD from screen when the HUD was hidded
-    [HUD removeFromSuperview];
-    [HUD release];
-	
-}
-#pragma mark -
 #pragma mark UI sliding methods
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
@@ -115,236 +128,328 @@
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-    const float movementDuration = 0.3f; // tweak as needed
-    UIDeviceOrientation ori = [[UIDevice currentDevice] orientation];
-    CGRect neueRect;
-    if (UIDeviceOrientationIsLandscape(ori)) {
-        if (up) {
-            neueRect = CGRectMake(0, -160, self.view.frame.size.width, self.view.frame.size.height);
-        } else {
-            neueRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-        }
-    } else if (UIDeviceOrientationIsPortrait(ori)){
-        if (up) {
-            neueRect = CGRectMake(0, -200, self.view.frame.size.width, self.view.frame.size.height);
-        } else {
-            neueRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-        }
-    } else {
-        //Chequear contra ancho de vista, si no, no funca. (FUCK YOU 5)
-        CGFloat ancho = self.view.frame.size.width;
-        if (ancho == 320) {
-            if (up) {
-                neueRect = CGRectMake(0, -200, self.view.frame.size.width, self.view.frame.size.height);
-            } else {
-                neueRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            }
-        } else if (ancho == 480) {
-            if (up) {
-                neueRect = CGRectMake(0, -160, self.view.frame.size.width, self.view.frame.size.height);
-            } else {
-                neueRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-            }
-        }
+    const float movementDuration = 0.3f;
+    int movementDistanceY;
+    
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        // Configuracion iPhone
+        if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
+            movementDistanceY = 160;
+        else
+            movementDistanceY = 200;
+    }
+    else
+    {
+        // Configuracion iPad
+        if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
+            movementDistanceY = 340;
+        else
+            movementDistanceY = 240;
     }
     
-    if ( CGRectEqualToRect(neueRect, self.view.frame)) {
-        return;
-    }
-	//NSLog(@"%@ %@", NSStringFromCGRect(neueRect), NSStringFromCGRect(self.view.frame));	
+    
+    int movement = (up ? -movementDistanceY : movementDistanceY);
+    
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
-    self.view.frame = neueRect;
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }
 
+#pragma mark view methods
 
-#pragma mark -
-
-- (IBAction)textFieldFinished:(id)sender
+- (IBAction)goToControlPanel:(UIButton *)sender
 {
-    
-    [self checkLoginPassword:sender];
-}
-
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
- - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
- if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
- // Custom initialization
- }
- return self;
- }
- */
-
-
-
-#pragma mark -
-#pragma mark screen rotation stuff
-
--(void) detectOrientation {
-    [self animateTextField:loginPassword up:[loginPassword isFirstResponder]];  
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation ==UIInterfaceOrientationLandscapeRight);
-}
-
--(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    int page = 0;
-    if (self.scrollView.contentOffset.x != 0) {
-        page = 1;
-    }    
-    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-
-    [UIView animateWithDuration:duration animations:^(void) {
-        [self.scrollView setContentSize:CGSizeMake(960, 126)];
-        self.nonCamuflageImage.center = CGPointMake(76, 98);
-        self.preyLogo.center = CGPointMake(333, 56);
-        self.buttn.center = CGPointMake(237, 134);
-        self.devReady.center = CGPointMake(350, 118);
-        self.detail.center = CGPointMake(381, 143);
-        self.loginButton.center = CGPointMake(480+240, 79);
-        self.loginPassword.center = CGPointMake(480+240, 29);
-        self.tipl.center = CGPointMake(480+240, 112);
-        [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*page, 0) animated:NO];
-    }];
-    } else if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
-        [UIView animateWithDuration:duration animations:^(void) {
-            [self.scrollView setContentSize:CGSizeMake(640, 126)];
-
-            self.nonCamuflageImage.center = CGPointMake(123, 98);
-            self.preyLogo.center = CGPointMake(160, 210);
-            self.loginPassword.center = CGPointMake(480, 29);
-            self.loginButton.center = CGPointMake(480, 79);
-            self.tipl.center = CGPointMake(480, 112);
-            self.buttn.center = CGPointMake(74, 290);
-            self.devReady.center = CGPointMake(186, 274);
-            self.detail.center = CGPointMake(217, 299);
-            [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*page, 0) animated:NO];
-        }];
+    if ([[UIDevice currentDevice] networkAvailable])
+    {
+        NSString *body = [NSString stringWithFormat:@"token=%@",[PreyConfig instance].tokenPanel];
+        UIViewController *controller = [UIWebViewController controllerToEnterdelegate:self setURL:URL_SESSION_PANEL withParameters:body];
+        
+        if (controller)
+            [self.navigationController presentViewController:controller animated:YES completion:NULL];
+    }
+    else
+    {
+        UIAlertView *alerta = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information",nil)
+                                                         message:NSLocalizedString(@"The internet connection appears to be offline",nil)
+                                                        delegate:nil
+                                               cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
+        [alerta show];
     }
 }
 
-#pragma mark -
-#pragma mark view methods
+- (IBAction)goToSettings:(UIButton *)sender
+{
+    [self showPreferencesController];
+    
+    // Disable for JWT Login 2016.03.31
+    /*
+    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width, 0) animated:YES];
+    
+    if ( (IS_OS_8_OR_LATER) && ([PreyConfig instance].isTouchIDEnabled) )
+        [self loginWithTouchID];
+    */
+}
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    movementDistance = 200;
+- (void)runWebForgot
+{
+    UIViewController *controller = [UIWebViewController controllerToEnterdelegate:self setURL:URL_FORGOT_PANEL];
+    PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    if (controller)
+        [appDelegate.viewController presentViewController:controller animated:YES completion:NULL];
+}
+
+// Disable for JWT Login 2016.03.31
+/*
+- (void)loginWithTouchID
+{
+    LAContext   *context  = [[LAContext alloc] init];
+    NSError     *errorCxt = nil;
+    
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&errorCxt])
+    {
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+                localizedReason:NSLocalizedString(@"Authenticate for login?",nil)
+                          reply:^(BOOL success, NSError *error) {
+                              
+                              if (success)
+                              {
+                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                      [self showPreferencesController];
+                                  });
+                              }
+                                  
+                              else if (error.code != kLAErrorUserCancel)
+                              {
+                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error",nil)
+                                                                                      message:NSLocalizedString(@"There was a problem verifying your identity",nil)
+                                                                                     delegate:nil
+                                                                            cancelButtonTitle:NSLocalizedString(@"OK",nil)
+                                                                            otherButtonTitles:nil];
+                                      [alert show];
+                                  });
+                              }
+                          }];
+    }
+}
+*/
+
+- (void)viewDidLoad
+{
+    if ([ReviewRequest shouldAskForReview])
+        [ReviewRequest askForReview];
+    
+    self.screenName = @"Login";
+    
+/*
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        [devReady setFont:[UIFont fontWithName:@"Roboto-Regular" size:24]];
+        [detail   setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+        [tipl     setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+        
+        [loginButton.titleLabel   setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+        [panelButton.titleLabel   setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+        [settingButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+    }
+    else
+    {
+        [devReady setFont:[UIFont fontWithName:@"Roboto-Regular" size:34]];
+        [detail   setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+        [tipl     setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+        
+        [loginButton.titleLabel   setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+        [panelButton.titleLabel   setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+        [settingButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+    }
+    [settingButton setTitle:[NSLocalizedString(@"Manage Prey settings", nil) uppercaseString] forState: UIControlStateNormal];
+    [panelButton setTitle:[NSLocalizedString(@"Go to Control Panel", nil) uppercaseString] forState: UIControlStateNormal];
+    [loginButton setTitle:[NSLocalizedString(@"Log in to Prey", nil) uppercaseString] forState: UIControlStateNormal];
+    [loginPassword setPlaceholder:NSLocalizedString(@"Type in your password", nil)];
+    [tipl setText:NSLocalizedString(@"Swipe to go back", nil)];
+*/
     PreyConfig *config = [PreyConfig instance];
-    [self.scrollView setContentSize:CGSizeMake(640, 126)];
+    [self.scrollView setContentSize:CGSizeMake(scrollView.frame.size.width*2, scrollView.frame.size.height)];
     [self.loginPassword setBorderStyle:UITextBorderStyleRoundedRect];
-    if (config.camouflageMode) {
+    
+    if (config.camouflageMode)
+    {
         [self.nonCamuflageImage setHidden:YES];
         [self.loginImage setHidden:NO];
         [self.detail setHidden:YES];
         [self.devReady setHidden:YES];
-        [self.buttn setHidden:YES];
         [self.preyLogo setHidden:YES];
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*1, 0) animated:NO];
         [self.tipl setHidden:YES];
-    } else {
+        [self configButtonsForCamouflage:YES];
+        
+        [loginButton setBackgroundColor:[UIColor clearColor]];
+        
+        if (IS_IPHONE4S) {
+            scrollView.frame = CGRectMake(scrollView.frame.origin.x, scrollView.frame.origin.y+30,
+                                          scrollView.frame.size.width, scrollView.frame.size.height);
+        }
+        
+        // Disable for JWT Login 2016.03.31
+        //if ( (IS_OS_8_OR_LATER) && ([PreyConfig instance].isTouchIDEnabled) )
+        //    [self loginWithTouchID];
+    }
+    else
+    {
         [self.tipl setHidden:NO];
         [self.nonCamuflageImage setHidden:NO];
         [self.loginImage setHidden:YES];
         [self.detail setHidden:NO];
         [self.devReady setHidden:NO];
-        [self.buttn setHidden:NO];
         [self.preyLogo setHidden:NO];
+        [self configButtonsForCamouflage:NO];
+        
+        // Enable for JWT Login 2016.03.31
+        if (!hideLogin)
+            [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*1, 0) animated:NO];
     }
     
-    [self.loginPassword addTarget:self
-                           action:@selector(textFieldFinished:)
-                 forControlEvents:UIControlEventEditingDidEndOnExit];
+    [self.loginPassword addTarget:self action:@selector(checkLoginPassword:) forControlEvents:UIControlEventEditingDidEndOnExit];
     
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:UIDeviceOrientationDidChangeNotification object:nil];
+    // Add forgot password
+    UIButton *btnForgotPwd;
+    btnForgotPwd = [[UIButton alloc] initWithFrame:tipl.frame];
+    [btnForgotPwd setBackgroundColor:[UIColor clearColor]];
+    [btnForgotPwd.titleLabel setFont:tipl.font];
+    [btnForgotPwd setTitleColor:[UIColor colorWithRed:(148/255.f) green:(169/255.f) blue:(183/255.f) alpha:1.f] forState:UIControlStateNormal];
+    [btnForgotPwd setTitleColor:[UIColor colorWithRed:(148/255.f) green:(169/255.f) blue:(183/255.f) alpha:.7] forState:UIControlStateHighlighted];
+    btnForgotPwd.titleLabel.textAlignment = UITextAlignmentCenter;
+    [btnForgotPwd setTitle:NSLocalizedString(@"Forgot your password?",nil) forState:UIControlStateNormal];
+    [btnForgotPwd addTarget:self action:@selector(runWebForgot) forControlEvents:UIControlEventTouchUpInside];
+    CGFloat fontSize = (IS_IPAD) ? 18 : 12;
+    [btnForgotPwd.titleLabel   setFont:[UIFont fontWithName:@"OpenSans" size:fontSize]];
+    [scrollView addSubview:btnForgotPwd];
+
+    tipl.hidden = YES;
+
+    // Add Tap Gesture to Prey Tour
+    [self configTourTouch];
     
     [super viewDidLoad];
-}
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized) {
-        [self.buttn setImage:[UIImage imageNamed:@"notokbutt.png"]];
-        [self.devReady setText:NSLocalizedString(@"Device not ready!", nil)];
-        [self.detail setText:NSLocalizedString(@"Location services are disabled for Prey. Reports will not be sent.", nil)];
-    } else {
-        [self.buttn setImage:[UIImage imageNamed:@"okbutt.png"]];
-        [self.devReady setText:NSLocalizedString(@"Device ready.", nil)];
-        [self.detail setText:NSLocalizedString(@"Your device is protected and waiting for the activation signal.", nil)];
+    
+    [self changeTexts];
+    
+    if ([[PreyConfig instance] hideTourWeb])
+        [self closeTourLabel];
+    
+    // Check geofencing on panel
+    if ([PreyConfig instance].isPro) {
+        [PreyRestHttpV2 checkGeofenceZones:5 withBlock:^(NSHTTPURLResponse *response, NSError *error) {
+            PreyLogMessage(@"App Delegate", 10, @"Geofence");
+        }];
     }
+    
+    // Check New Version on App Store
+    if ( (!config.isMissing) && ([config shouldAskForUpdateApp]) ) {
+        dispatch_queue_t bgQueue = dispatch_queue_create("App Version Queue", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(bgQueue, ^{
+            [[PreyConfig instance] checkLastVersionOnStore];
+        });
+    }
+}
+
+- (void)changeTexts
+{
+    [loginButton setTitle:[NSLocalizedString(@"Log In", nil) uppercaseString] forState: UIControlStateNormal];
+    [loginPassword setPlaceholder:NSLocalizedString(@"Type in your password", nil)];
+    [loginPassword setBackgroundColor:[UIColor whiteColor]];
+    [loginPassword setTextColor:[UIColor blackColor]];
+
+    
+    _remoteControlLbl.text  = NSLocalizedString(@"REMOTE CONTROL FROM YOUR", nil);
+    _preyAccountLbl.text    = NSLocalizedString(@"PREY ACCOUNT", nil);
+    _configureLbl.text      = NSLocalizedString(@"CONFIGURE", nil);
+    _preySettingsLbl.text   = NSLocalizedString(@"PREY SETTINGS", nil);
+}
+
+- (void)configTourTouch
+{
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startPreyTour)];
+    [tap setDelegate:self];
+    
+    UIImageView *tourImg = (UIImageView*)[self.view viewWithTag:701];
+    [tourImg setUserInteractionEnabled:YES];
+    [tourImg addGestureRecognizer:tap];
+    
+    // Add target for close Tour Label
+    UIButton *closeTourBtn = (UIButton*)[self.view viewWithTag:702];
+    [closeTourBtn addTarget:self action:@selector(closeTourLabel) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    language = [language substringToIndex:2];
+
+    if ([language isEqualToString:@"es"])
+        tourImg.image = [UIImage imageNamed:@"tour-es"];
+}
+
+- (void)closeTourLabel
+{
+    UIImageView *tourImg   = (UIImageView*)[self.view viewWithTag:701];
+    UIButton *closeTourBtn = (UIButton*)[self.view viewWithTag:702];
+
+    [tourImg removeFromSuperview];
+    [closeTourBtn removeFromSuperview];
+}
+
+- (void)startPreyTour
+{
+    PreyTourWebView *controller;
+    PreyAppDelegate *appDelegate = (PreyAppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    if (IS_IPAD)
+        controller = [[PreyTourWebView alloc] initWithNibName:@"PreyTourWebView-iPad" bundle:nil];
+    else
+        controller = (IS_IPHONE5) ? [[PreyTourWebView alloc] initWithNibName:@"PreyTourWebView-iPhone-568h" bundle:nil] :
+                                    [[PreyTourWebView alloc] initWithNibName:@"PreyTourWebView-iPhone" bundle:nil];
+
+    if (controller)
+        [appDelegate.viewController presentViewController:controller animated:YES completion:NULL];
+}
+
+- (void)configButtonsForCamouflage:(BOOL)isCamouflage
+{
+    if (isCamouflage)
+    {
+        [loginButton setBackgroundImage:[UIImage imageNamed:@"bt-camouflage"] forState:UIControlStateNormal];
+        [loginButton setBackgroundImage:[UIImage imageNamed:@"bt-camouflage"] forState:UIControlStateHighlighted];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // Check Device Authorization
+    [self checkDeviceAuth];
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
-- (void)viewWillDisappear:(BOOL)animated
-{
-    // unregister for keyboard notifications while not visible.
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil]; 
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
- /*
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-*/
-- (void)dealloc {
-    [super dealloc];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    [self.tableView setScrollEnabled:NO];
-    return 2;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-	if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
-    }
-    if (indexPath.row == 0) {
-         [cell.textLabel setText:@"Manage Prey settings"];
-    } else {
-         [cell.textLabel setText:@"Log into the Control Panel"];
-    }
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row == 0) {
-        [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width, 0) animated:YES];
-    } else if (indexPath.row == 1) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://panel.preyproject.com"]];
-    }
-}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     int page = floor(self.scrollView.contentOffset.x/self.scrollView.frame.size.width);
     if (page != 0) {
-        PreyConfig *config = [PreyConfig instance];
-        if (!config.camouflageMode) {
-            [self.scrollView setScrollEnabled:YES];
-        }
-        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO];
-        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] animated:NO];
+
+        [self.scrollView setScrollEnabled:NO];
+
+        // Disable for JWT Login 2016.03.31
+        //PreyConfig *config = [PreyConfig instance];
+        //if (!config.camouflageMode)
+        //    [self.scrollView setScrollEnabled:YES];
     }
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -352,6 +457,29 @@
         [self.scrollView setScrollEnabled:NO];
         [self.view endEditing:YES];
     }
+}
+
+#pragma mark UIAlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+    if ( (alertView.tag == kTagAlertViewAuthDevice) && (&UIApplicationOpenSettingsURLString != NULL) && (buttonIndex == 0) ) {
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
+
+#pragma mark Device Authorization
+
+- (void)checkDeviceAuth {
+    
+    BOOL isAllAuthAvailable = [[DeviceAuth instance] checkAllDeviceAuthorization:self];
+    
+    self.devReady.text = (isAllAuthAvailable) ? [NSLocalizedString(@"PROTECTED", nil) uppercaseString] :
+                                                [NSLocalizedString(@"NOT PROTECTED", nil) uppercaseString];
+
+    self.detail.text   = NSLocalizedString(@"current device status", nil);
 }
 
 @end

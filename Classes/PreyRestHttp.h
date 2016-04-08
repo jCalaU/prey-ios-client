@@ -7,40 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
-
-
 #import "User.h"
-#import "ASIHTTPRequest.h"
-#import "ASIFormDataRequest.h"
-#import "RegexKitLite.h"
-#import "Constants.h"
 #import "Device.h"
-#import "DeviceModulesConfig.h"
 
+@interface PreyRestHttp : NSObject
 
++ (Class)getClassVersion;
++ (void)checkTransaction:(NSInteger)reload withString:(NSString *)receiptData withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)getCurrentControlPanelApiKey:(NSInteger)reload withUser:(User *)user withBlock:(void (^)(NSString *apiKey, NSError *error))block;
++ (void)getTokenFromControlPanel:(NSInteger)reload withUser:(User *)user withBlock:(void (^)(NSString *apiKey, NSError *error))block;
++ (void)createApiKey:(NSInteger)reload withUser:(User *)user withBlock:(void (^)(NSString *apiKey, NSError *error))block;
++ (void)createDeviceKeyForDevice:(NSInteger)reload withDevice:(Device *)device usingApiKey:(NSString *)apiKey withBlock:(void (^)(NSString *deviceKey, NSError *error))block;
++ (void)deleteDevice:(NSInteger)reload withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)setPushRegistrationId:(NSInteger)reload  withToken:(NSString *)tokenId withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)checkCommandJsonForDevice:(id)cmdString;
++ (void)checkStatusForDevice:(NSInteger)reload withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)sendJsonData:(NSInteger)reload withData:(NSDictionary*)jsonData toEndpoint:(NSString *)url withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)sendJsonData:(NSInteger)reload withData:(NSDictionary*)jsonData andRawData:(NSDictionary*)rawData toEndpoint:(NSString *)url withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
++ (void)checkStatusInBackground:(NSInteger)reload withURL:(NSString*)endpoint withBlock:(void (^)(NSHTTPURLResponse *response, NSError *error))block;
 
-@interface PreyRestHttp : NSObject {
-	NSMutableData *responseData;
-	NSURL *baseURL;
-}
-
-@property (retain) NSMutableData *responseData;
-@property (retain) NSURL *baseURL;
-
-
-- (NSString *) getCurrentControlPanelApiKey: (User *) user;
-- (NSString *) userAgent;
-- (NSString *) createApiKey: (User *) user;
-- (NSString *) createDeviceKeyForDevice: (Device*) device usingApiKey: (NSString *) apiKey;
-- (BOOL) deleteDevice: (Device*) device;
-- (BOOL) validateIfExistApiKey: (NSString *) apiKey andDeviceKey: (NSString *) deviceKey;
-- (NSString *) getErrorMessageFromXML: (NSData *) response;
-- (DeviceModulesConfig *) getXMLforUser: (NSString *) apiKey device:(NSString *) deviceKey;
-- (BOOL) changeStatusToMissing: (BOOL) missing forDevice:(NSString *) deviceKey fromUser: (NSString *) apiKey;
-- (BOOL) isMissingTheDevice: (NSString *) device ofTheUser: (NSString *) apiKey;
-- (void) sendReport: (Report *) report;
-+ (BOOL) checkInternet;
-- (void) getAppstoreConfig: (id) delegate inURL: (NSString *) URL;
-- (void) setPushRegistrationId: (NSString *) id;
++ (void)returnStatusCode503:(void (^)(NSHTTPURLResponse *response, NSError *error))block checkCompletionHandler:(BOOL)callHandler;
++ (void)returnStatusCode503WithString:(void (^)(NSString *response, NSError *error))block checkCompletionHandler:(BOOL)callHandler;
++ (void)displayErrorAlert:(NSString *)alertMessage title:(NSString*)titleMessage;
 
 @end

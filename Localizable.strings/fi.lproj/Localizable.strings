@@ -1,0 +1,151 @@
+"About" = "Tietoa";
+
+"Access Denied" = "Pääsy estetty";
+
+"Accessing your account..." = "Yhdistetään tiliisi";
+
+"Account created! Remember to verify your account by opening your inbox and clicking on the link we sent to your email address." = "Tili luotu! Muista vahvistaa tilisi avaamalla sähköpostisi ja napsauttamalla linkkiä lähettämästämme sähköpostista.";
+
+"Add this device!" = "LIsää tämä laite!";
+
+"Already a Prey user" = "On jo Prey-käyttäjä";
+
+"An unknown error has occurred" = "Tapahtui tuntematon virhe";
+
+"Attaching device..." = "Liitetään laitetta...";
+
+"Camouflage mode" = "Naamiotila";
+
+"Checking your password..." = "Tarkistetaan salasanaasi...";
+
+"Choose a 6 characters password" = "Valitse salasana, jossa on kuusi merkkiä";
+
+"Congratulations!" = "Onnittelut!";
+
+"Congratulations! You have successfully associated this iOS device with your Prey account." = "Onnittelut! Olet liittänyt tämän iOS-laitteen onnistuneesti Prey-tiliisi.";
+
+"Couldn't add your device" = "Laitetta ei voitu lisätä";
+
+"Couldn't check your password" = "Salasanaasi ei voitu tarkistaa";
+
+"Create my account!" = "Luo tilini!";
+
+"Create Prey account" = "Luo Prey-tili";
+
+"Creating account..." = "Luodaan tiliä...";
+
+"Current Location" = "Nykyinen sijainti";
+
+"Detach device" = "Irrota laite";
+
+"Device not ready!" = "Laite ei ole valmiina!";
+
+"Device ready" = "Laite valmis";
+
+"Enter a valid e-mail address" = "Syötä kelvollinen sähköpostiosoite";
+
+"Help" = "Apua";
+
+"It seems you've reached your limit for devices on the Control Panel. Try removing this device from your account if you had already added." = "Näyttää siltä, että olet saavuttanut laitemäärän rajan ohjauspaneelissa. Yritä poistaa tämä laite tililtäsi, jos olet sen jo lisännyt.";
+
+"Location services are disabled for Prey. Reports will not be sent." = "Preyn käyttämät sijaintipalvelut ovat poissa käytöstä. Raportteja ei lähetetä.";
+
+"Log in to Prey" = "Kirjaudu sisään Prey-sovellukseen";
+
+"New user" = "Uusi käyttäjä";
+
+"No, don't delete" = "Ei, älä poista";
+
+"OK" = "OK";
+
+"Password must be at least 6 characters" = "Salasanan pitää olla vähintään 6 merkin pituinen";
+
+"Passwords do not match" = "Salasanat eivät täsmää";
+
+"Please wait" = "Odota";
+
+"Preferences" = "Ominaisuudet";
+
+"Privacy Policy" = "Yksityisyyden suoja";
+
+"Repeat your password" = "Toista salasanasi";
+
+"Settings" = "Asetukset";
+
+"Terms of Service" = "Käyttöehdot";
+
+"There was a problem getting your account information. Please make sure the email address you entered is valid, as well as your password." = "Tilitietojesi saamisessa tapahtui virhe. Varmista, että sähköpostiosoitteesi ja salasanasi ovat oikein.";
+
+"Unable to access Location Services.\n You need to grant Prey access if you wish to track your device." = "Sijaintipalveluihin pääsy ei onnistu.\nSinun pitää myöntää Preylle pääsy, jos haluat jäljittää laitettasi.";
+
+"Unable to fetch location data. Is this device on airplane mode?" = "Sijaintitiedon nouto ei onnistunut. Onko laite lentokone-tilassa?";
+
+"Upgrade to Pro" = "Päivitä Pro-versioon";
+
+"User couldn't be created" = "Käyttäjää ei voitu luoda";
+
+"Version" = "Versio";
+
+"Warning" = "Varoitus";
+
+"We have a situation!" = "Meillä on tilanne päällä!";
+
+"Wrong password. Try again." = "Väärä salasana. Yritä uudelleen.";
+
+"Yes, remove from my account" = "Kyllä, poista tililtäni";
+
+"You have successfully associated this device with your Prey Control Panel account." = "Olet liittänyt tämän laitteen onnistuneesti Preyn ohjauspaneelitiliisi.";
+
+"You're about to delete this device from the Control Panel.\n Are you sure?" = "Olet aikeissa poistaa tämän laitteen ohjauspaneelistasi.\nOletko varma?";
+
+"Your device is protected and waiting for the activation signal." = "Laitteesi on suojattu ja se odottaa aktivointisignaalia.";
+
+"Your email" = "Sähköpostisi";
+
+"Your name" = "Nimesi";
+
+"Rate us" = "Arvostele Prey";
+
+"Give us ★★★★★ on the App Store if you like Prey." = "Anna meille viisi tähteä App Storessa jos pidät Preystä.";
+
+"Remind me later" = "Muistuta minua myöhrmmin";
+
+"Yes, rate Prey!" = "Kyllä, arvostele Prey!";
+
+"Information" = "Tiedot";
+
+"Thanks for your support. You've just gained access to all the Pro features, including private and direct support from us, the Prey Team." = "Kiitos tuestasi. Olet juuri saanut pääsyn kaikkiin Pro-ominaisuuksiin, mukaan lukien yksityisen ja suoran tuen meiltä, Prey-tiimiltä.";
+
+"Congrats,\nyou're now Pro" = "Onnittelut,\olet nyt Pro";
+
+"Your password" = "Salasanasi";
+
+"Forgot your password?" = "Unohditko salasanasi?";
+
+"Try Again" = "Yritä uudelleen";
+
+"Device set up!" = "Laite valmis!";
+
+"Manage Prey settings" = "Hallinnoi Preyn asetuksia";
+
+"Go to Control Panel" = "Siirry ohjauspaneeliin";
+
+"Type in your password" = "Kirjoita salasanasi";
+
+"Swipe to go back" = "Pyyhkäise palataksesi";
+
+"Share on Facebook" = "Jaa Facebookissa";
+
+"Share on Twitter" = "Jaa Twitterissä";
+
+"Detaching device ..." = "Irrotetaan laitetta...";
+
+"Is not available" = "Ei ole saatavissa";
+
+"Canceled transaction, please try again." = "Rahansiirto peruutettu, yritä uudelleen.";
+
+"Alert notification disabled" = "Hälytysilmoitus poistettu käytöstä";
+
+"You need to grant Prey access to show alert notifications in order to remotely mark it as missing." = "Sinun pitää myöntää Preylle pääsy hälytysilmoitusten näyttöön , jotta voit merkitä laitteen kadonneeksi.";
+
+"Keep Prey in background to enable all of its features." = "Pidä Prey taustalla ottaaksesi se kaikki ominaisuudet käyttöön.";

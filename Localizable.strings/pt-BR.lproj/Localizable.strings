@@ -1,0 +1,151 @@
+"About" = "Sobre";
+
+"Access Denied" = "Acesso Negado";
+
+"Accessing your account..." = "Acessando sua conta...";
+
+"Account created! Remember to verify your account by opening your inbox and clicking on the link we sent to your email address." = "Conta criada! Lembre-se de verificar sua conta por abrir sua Caixa de Entrada e clicar no link que enviamos para seu endereço de email.";
+
+"Add this device!" = "Adicionar este dispositivo!";
+
+"Already a Prey user" = "Já é usuário do Prey";
+
+"An unknown error has occurred" = "Ocorreu um erro desconhecido";
+
+"Attaching device..." = "Anexando dispositivo...";
+
+"Camouflage mode" = "Modo camuflagem";
+
+"Checking your password..." = "Verificando sua senha...";
+
+"Choose a 6 characters password" = "Escolha uma senha com 6 caracteres";
+
+"Congratulations!" = "Parabéns!";
+
+"Congratulations! You have successfully associated this iOS device with your Prey account." = "Parabéns! Você associou este dispositivo iOS à sua conta no Prey com sucesso.";
+
+"Couldn't add your device" = "Não foi possível adicionar seu dispositivo.";
+
+"Couldn't check your password" = "Não foi possível conferir sua senha";
+
+"Create my account!" = "Criar minha conta!";
+
+"Create Prey account" = "Criar uma conta no Prey";
+
+"Creating account..." = "Criando conta...";
+
+"Current Location" = "Localização Atual";
+
+"Detach device" = "Remover dispositivo";
+
+"Device not ready!" = "Dispositivo não está pronto!";
+
+"Device ready" = "Dispositivo está pronto";
+
+"Enter a valid e-mail address" = "Digite um endereço de e-mail válido";
+
+"Help" = "Ajuda";
+
+"It seems you've reached your limit for devices on the Control Panel. Try removing this device from your account if you had already added." = "Parece que você alcançou o limite de dispositivos em seu Painel de Controle. Tente remover este dispositivo de sua conta se por acaso você já o tenha adicionado.";
+
+"Location services are disabled for Prey. Reports will not be sent." = "Serviço de localicação está desabilitado para o Prey. Não serão enviados relatórios.";
+
+"Log in to Prey" = "Entrar no Prey";
+
+"New user" = "Novo usuário";
+
+"No, don't delete" = "Não, não apague";
+
+"OK" = "OK";
+
+"Password must be at least 6 characters" = "Sua senha precisa ter pelo menos 6 caracteres";
+
+"Passwords do not match" = "As senhas não combinam";
+
+"Please wait" = "Por favor aguarde";
+
+"Preferences" = "Preferências";
+
+"Privacy Policy" = "Política de Privacidade";
+
+"Repeat your password" = "Repita sua senha";
+
+"Settings" = "Configurações";
+
+"Terms of Service" = "Termos de uso";
+
+"There was a problem getting your account information. Please make sure the email address you entered is valid, as well as your password." = "Houve um problema ao tentar obter as informações da sua conta. Por favor certifique-se que o endereço de email é válido, assim como sua senha.";
+
+"Unable to access Location Services.\n You need to grant Prey access if you wish to track your device." = "Não foi possível acessar o Serviço de Localização.\nVocê precisa dar ao Prey permissão de acesso se você deseja rastrear seu dispositivo.";
+
+"Unable to fetch location data. Is this device on airplane mode?" = "Não foi possível obter dados de localização. Por acaso o dispositivo está em Modo Avião?";
+
+"Upgrade to Pro" = "Atualize para o Pro";
+
+"User couldn't be created" = "O usuário não pôde ser criado";
+
+"Version" = "Versão";
+
+"Warning" = "Aviso";
+
+"We have a situation!" = "Temos um problema!";
+
+"Wrong password. Try again." = "Senha errada. Tente novamente.";
+
+"Yes, remove from my account" = "Sim, remova da minha conta";
+
+"You have successfully associated this device with your Prey Control Panel account." = "Você associou este dispositivo ao seu Painel de Controle do Prey com sucesso.";
+
+"You're about to delete this device from the Control Panel.\n Are you sure?" = "Você está prestes a remover este dispositivo de seu Painel de Controle.\nTem certeza?";
+
+"Your device is protected and waiting for the activation signal." = "Seu dispositivo está protegido e esperando pelo sinal de ativação.";
+
+"Your email" = "Seu email";
+
+"Your name" = "Seu nome";
+
+"Rate us" = "Avalie-nos";
+
+"Give us ★★★★★ on the App Store if you like Prey." = "Nos dê ★★★★★ na App Store se você gosta do Prey.";
+
+"Remind me later" = "Lembrar mais tarde";
+
+"Yes, rate Prey!" = "Sim, avaliar o Prey!";
+
+"Information" = "Informação";
+
+"Thanks for your support. You've just gained access to all the Pro features, including private and direct support from us, the Prey Team." = "Obrigado por seu suporte. Você acaba de ganhar acesso a todas as funcionalidades Pro, incluindo suporte direto e privado fornecido por nós, o Time Prey.";
+
+"Congrats,\nyou're now Pro" = "Parabéns,\nagora você é Pro";
+
+"Your password" = "Sua senha";
+
+"Forgot your password?" = "Esqueceu sua senha?";
+
+"Try Again" = "Tente novamente";
+
+"Device set up!" = "Dispositivo configurado!";
+
+"Manage Prey settings" = "Gerenciar configurações do Prey";
+
+"Go to Control Panel" = "Ir para o Painel de Controle";
+
+"Type in your password" = "Digite sua senha";
+
+"Swipe to go back" = "Passe o dedo para o lado para voltar";
+
+"Share on Facebook" = "Compartilhar no Facebook";
+
+"Share on Twitter" = "Compartilhar no Twitter";
+
+"Detaching device ..." = "Desanexando dispositivo...";
+
+"Is not available" = "Não está disponível";
+
+"Canceled transaction, please try again." = "Transação cancelada, tente de novo.";
+
+"Alert notification disabled" = "Alerta de notificação desabilitado";
+
+"You need to grant Prey access to show alert notifications in order to remotely mark it as missing." = "Você precisa dar ao Prey permissão para exibir alertas de notificações, para que você possa marcá-lo remotamente como perdido.";
+
+"Keep Prey in background to enable all of its features." = "Mantenha o Prey em background para habilitar todas as suas funcionalidades.";

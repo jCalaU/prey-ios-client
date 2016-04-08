@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Device.h"
 
 @interface User : NSObject {
 	
@@ -21,18 +20,17 @@
 
 }
 
-@property (nonatomic,retain) NSString *apiKey;
-@property (nonatomic,retain) NSString *name;
-@property (nonatomic,retain) NSString *email;
-@property (nonatomic,retain) NSString *country;
-@property (nonatomic,retain) NSString *password;
-@property (nonatomic,retain) NSString *repassword;
-@property (nonatomic,retain) NSArray *devices;
+@property (nonatomic) NSString *apiKey;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *email;
+@property (nonatomic) NSString *country;
+@property (nonatomic) NSString *password;
+@property (nonatomic) NSString *repassword;
+@property (nonatomic) NSArray *devices;
 @property (nonatomic, getter = isPro) BOOL pro;
 
-+(User*) allocWithEmail: (NSString*) email password: (NSString*) password;
-+(User*) createNew: (NSString*) name email: (NSString*) email password: (NSString*) password repassword: (NSString*) repassword;
--(BOOL) deleteDevice: (Device*) device;
-
++ (void)getTokenFromPanel:(NSString*)emailUser password:(NSString*)passwordUser  withBlock:(void (^)(NSString *token, NSError *error))block;
++ (void)allocWithEmail:(NSString*)emailUser password:(NSString*)passwordUser  withBlock:(void (^)(User *user, NSError *error))block;
++ (void)createNew:(NSString*)nameUser email:(NSString*)emailUser password:(NSString*)passwordUser repassword:(NSString*)repasswordUser  withBlock:(void (^)(User *user, NSError *error))block;
 
 @end
