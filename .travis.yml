@@ -1,5 +1,7 @@
 language: objective-c
+xcode_project: Prey.xcodeproj
+xcode_scheme: Prey
 before_install:
     - brew update
     - brew uninstall xctool && brew install xctool --HEAD
-script: rake test
+#script: rake test
