@@ -1,15 +1,14 @@
 language: objective-c
+osx_image: xcode7.3
 env:
   matrix:
-    - TEST_OS=8.1 SIMULATOR='iphone 4s' 
-    - TEST_OS=8.1 SIMULATOR='ipad 2'
-    - TEST_OS=9.3 SIMULATOR='iphone 4s' 
-    - TEST_OS=9.3 SIMULATOR='ipad 2'
+    - TEST_OS='platform=iOS Simulator,name=iPhone 4s,OS=9.2'
+    - TEST_OS='platform=iOS Simulator,name=iPad 2,OS=9.2'
+    - TEST_OS='platform=iOS Simulator,name=iPhone 4s,OS=8.1'
+    - TEST_OS='platform=iOS Simulator,name=iPad 2,OS=8.1'
 xcode_project: Prey.xcodeproj
 xcode_scheme: Prey
-osx_image: xcode7.3
 before_install:
     - brew update
     - brew uninstall xctool && brew install xctool --HEAD
-#script: rake test
-script: xctool -project Prey.xcodeproj -scheme Prey build test -test-sdk iphonesimulator -destination 'platform=iOS Simulator,name=$SIMULATOR,OS=$TEST_OS' CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+script: xctool -project Prey.xcodeproj -scheme Prey build test -test-sdk iphonesimulator -destination $TEST_OS CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
